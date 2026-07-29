@@ -1,0 +1,19 @@
+{
+  "primary": {
+    "type": "ws",
+    "enabled": true,
+    "heartbeatInterval": 30000,
+    "heartbeatTimeout": 90000
+  },
+  "fallback": {
+    "type": "dns",
+    "enabled": true,
+    "domain": "c2.cyberai.local",
+    "queryInterval": 60000
+  },
+  "emergency": {
+    "type": "http",
+    "enabled": false,
+    "endpoint": "https://analytics.google-analytics.com/collect"
+  }
+}
