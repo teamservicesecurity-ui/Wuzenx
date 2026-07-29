@@ -1,0 +1,27 @@
+{
+  "name": "cyberai-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "CyberAI C2 operator dashboard — React 19 + Vite 6 + Tailwind 4",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.4.0",
+    "zustand": "^5.0.10",
+    "leaflet": "^1.9.4",
+    "react-leaflet": "^5.0.0",
+    "lucide-react": "^0.475.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.4.1",
+    "vite": "^6.3.0",
+    "tailwindcss": "^4.1.0",
+    "@tailwindcss/vite": "^4.1.0"
+  }
+}
