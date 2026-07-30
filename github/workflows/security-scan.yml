@@ -1,0 +1,91 @@
+# ============================================================
+# FILE: .github/workflows/security-scan.yml
+# ============================================================
+name: Security Scan & Lint
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ main, master ]
+  schedule:
+    - cron: '0 6 * * 1'  # Every Monday at 6 AM UTC
+
+jobs:
+  lint:
+    name: Lint Code
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: |
+          cd server && npm ci && cd ..
+          cd dashboard && npm ci && cd ..
+
+      - name: ESLint Server
+        working-directory: server
+        run: npx eslint . --ext .js,.json || true
+
+      - name: ESLint Dashboard
+        working-directory: dashboard
+        run: npx eslint . --ext .js,.jsx,.ts,.tsx || true
+
+  dependency-scan:
+    name: Dependency Audit
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Audit Server
+        working-directory: server
+        run: npm audit --production || true
+
+      - name: Audit Dashboard
+        working-directory: dashboard
+        run: npm audit --production || true
+
+  codeql:
+    name: CodeQL Analysis
+    runs-on: ubuntu-24.04
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: javascript, java
+          queries: security-and-quality
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v3
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+
+  secrets-scan:
+    name: Secrets Detection
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: TruffleHog Scan
+        uses: trufflesecurity/trufflehog@v3
+        with:
+          extra_args: --only-verified
