@@ -1,0 +1,24 @@
+# ============================================================
+# FILE: deploy/.dockerignore
+# ============================================================
+.git
+.gitignore
+.github
+README.md
+*.md
+node_modules
+__pycache__
+*.pyc
+.env
+.env.*
+*.local
+*.log
+.DS_Store
+Thumbs.db
+.vscode
+.idea
+coverage
+tests
+test
+docs
+payload
