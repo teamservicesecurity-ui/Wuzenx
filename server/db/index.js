@@ -1,5 +1,5 @@
 import Database from 'better-sqlite3';
-import { readFileSync, existsSync } from 'node:fs';
+import { readFileSync, existsSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { log } from '../utils.js';
@@ -15,12 +15,9 @@ export function initDatabase(config) {
   const dbPath = config.dbPath;
 const dir = dirname(dbPath);
 
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir, { recursive: true });
-}
+mkdirSync(dir, { recursive: true });
 
 const db = new Database(dbPath);
-
   // Performance pragmas
   db.pragma('journal_mode = WAL');
   db.pragma('foreign_keys = ON');
