@@ -12,8 +12,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # ============================================================
 FROM base AS server-deps
 COPY server/package*.json ./server/
-RUN cd server && npm ci --production --ignore-scripts
-
+RUN apt-get update && apt-get install -y build-essential python3 make g++ \
+    && cd server && npm ci --production
 # ============================================================
 # Stage 2: Final image
 # ============================================================
