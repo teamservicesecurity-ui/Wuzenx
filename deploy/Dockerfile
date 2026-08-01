@@ -2,9 +2,10 @@
 # FILE: deploy/Dockerfile
 # ============================================================
 FROM node:20-slim AS base
-WORKDIR /app
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
+    libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
 # ============================================================
