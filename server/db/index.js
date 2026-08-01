@@ -13,14 +13,13 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
  */
 export function initDatabase(config) {
   const dbPath = config.dbPath;
+const dir = dirname(dbPath);
 
-  // Ensure directory exists
-  const dir = dirname(dbPath);
-  if (!existsSync(dir)) {
-    import('node:fs').then(fs => fs.mkdirSync(dir, { recursive: true }));
-  }
+if (!fs.existsSync(dir)) {
+  fs.mkdirSync(dir, { recursive: true });
+}
 
-  const db = new Database(dbPath);
+const db = new Database(dbPath);
 
   // Performance pragmas
   db.pragma('journal_mode = WAL');
