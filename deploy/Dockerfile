@@ -3,26 +3,27 @@
 # ============================================================
 FROM node:20-slim AS base
 
+WORKDIR /app
+
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
     libstdc++6 \
     && rm -rf /var/lib/apt/lists/*
 
-# ============================================================
-# Stage 1: Server dependencies
-# ============================================================
-FROM base AS server-deps
-COPY server/package*.json ./server/
-RUN apt-get update && apt-get install -y build-essential python3 make g++ \
-    && cd server && npm ci --production
-# ============================================================
-# Stage 2: Final image
-# ============================================================
-FROM base AS final
-ENV NODE_ENV=production
-ENV PORT=3000
 
-# Copy server code
+FROM base AS server-deps
+
+WORKDIR /app/server
+
+COPY server/package*.json ./
+
+RUN npm ci --omit=dev
+
+
+FROM base AS final
+
+WORKDIR /app
+
 COPY --from=server-deps /app/server/node_modules ./server/node_modules
 COPY server/ ./server/
 
